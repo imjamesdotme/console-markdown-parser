@@ -27,19 +27,14 @@ namespace console_markdown_parser
             return result;
         }
 
-        public void writeFile(string fileContents, string fileName)
+        public void writeFile(string fileContents, string finalFilePath)
         {
 
-            using (StreamWriter sw = new StreamWriter(fileName))
+            using (StreamWriter sw = new StreamWriter(finalFilePath))
             {
-
-                // Write contents to file.
-                // Get the file name.
-                // Confirm finished in the console.
-
                 sw.WriteLine(fileContents);
-
                 sw.Close();
+                Console.WriteLine("Your markdown has been converted to HTML sucessfully!");
             }
 
         }

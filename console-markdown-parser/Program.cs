@@ -12,28 +12,65 @@ namespace console_markdown_parser
         static void Main(string[] args)
         {
 
-            Console.WriteLine("Please provide a file path (you can drag & drop):");
-            string filePath = Console.ReadLine();
+            string filePath = "";
 
-            // Find the original directory path.
-            string[] originalFilePath = filePath.Split('\\');
-            string finalFilePath = "";
-            string fileName = "";
+            // Globals for inputted file extension.
+            int dotLocation = 0;
+            string fileExtension = "";
+            Console.WriteLine(fileExtension);
 
-            foreach (var directory in originalFilePath)
+            bool fileTypeCheck = false;
+
+            // Check inputted file extension is valid.
+            while (!fileTypeCheck)
             {
-                if (!directory.Contains(".md"))
-                {
-                    finalFilePath += directory + "\\";
-                }
-                else
-                {
-                    fileName = directory.Replace(".md", ".html");
-                }
-            }
+                Console.WriteLine("Please provide a file path (you can drag & drop):");
+                filePath = Console.ReadLine();
 
-            // Escape backslashes in the file path.
-            filePath = filePath.Replace(@"\", @"\\");
+                // Check inputting file extension type.
+                dotLocation = filePath.LastIndexOf('.');
+                fileExtension = filePath.Substring(dotLocation + 1);
+
+                // Check for " at the end of the file extension - this can occur if the file name contains spaces.
+                /*
+                if (fileExtension.Contains("\""))
+                {
+                    Console.WriteLine("True");
+                    fileExtension = fileExtension.Replace("\"","");
+                }
+                */
+
+                try
+                {
+                    switch (fileExtension)
+                    {
+                        case "markdown":
+                        case "md":
+                        case "mdown":
+                        case "mkdn":
+                        case "mkd":
+                        case "mdtext":
+                        case "mdtxt":
+                        case "text":
+                        case "txt":
+                        case "rmd":
+                            fileTypeCheck = true;
+                            break;
+                        default:
+                            fileTypeCheck = false;
+                            Console.WriteLine("Invalid file type. Please try again!");
+                            break;
+                    }
+                }
+                catch(Exception)
+                {
+                    Console.WriteLine("Please try again.");
+                }
+
+            }
+            
+            // Replace valid file extension with .html
+            string finalFilePath = filePath.Replace(fileExtension, "html");
 
             // Read markdown file.
             string fileContent = FileManagement.readFile(filePath);
@@ -41,7 +78,7 @@ namespace console_markdown_parser
             string markdown = Markdown.requestMarkdown(fileContent);
 
             FileManagement file = new FileManagement();
-            file.writeFile(markdown, fileName);
+            file.writeFile(markdown, finalFilePath);
 
         }
     }
