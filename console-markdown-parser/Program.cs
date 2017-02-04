@@ -27,19 +27,16 @@ namespace console_markdown_parser
                 Console.WriteLine("Please provide a file path (you can drag & drop):");
                 filePath = Console.ReadLine();
 
+                // If drag & dropped file path contains a space, command prompt will wrap the path in quotes, these need to be removed to avoid an exception being thrown.
+                if (filePath.IndexOf("\"") == 0)
+                {
+                    filePath = filePath.Substring(1, filePath.Length - 2);
+                }
+
                 // Check inputting file extension type.
                 dotLocation = filePath.LastIndexOf('.');
                 fileExtension = filePath.Substring(dotLocation + 1);
-
-                // Check for " at the end of the file extension - this can occur if the file name contains spaces.
-                /*
-                if (fileExtension.Contains("\""))
-                {
-                    Console.WriteLine("True");
-                    fileExtension = fileExtension.Replace("\"","");
-                }
-                */
-
+  
                 try
                 {
                     switch (fileExtension)
